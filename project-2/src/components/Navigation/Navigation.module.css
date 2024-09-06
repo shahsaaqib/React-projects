@@ -1,0 +1,21 @@
+.nav_button {
+  all: unset;
+  padding: 6px 16px;
+  background: var(--red);
+  height: 18px;
+  color: white;
+  font-weight: 400;
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  height: 72px;
+  align-items: center;
+}
+
+.navigation ul {
+  display: flex;
+  list-style: none;
+  gap: 24px;
+}

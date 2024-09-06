@@ -1,0 +1,11 @@
+h1 {
+  font-weight: 800;
+  font-size: 48px;
+  line-height: auto;
+}
+
+p {
+  font-weight: 600;
+  font-size: 16px;
+  max-width: 975px;
+}
