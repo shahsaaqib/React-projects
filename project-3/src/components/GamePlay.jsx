@@ -13,11 +13,18 @@ const GamePlay = () => {
     return Math.floor(Math.random() * (max - min) + min);
   };
 
+  const playSound = (soundName) => {
+    const diceSound = new Audio(`./sounds/${soundName}.mp3`);
+    diceSound.play();
+  };
+
   const roleDice = () => {
     if (!selectedNumber) {
+      playSound('error');
       setError('You have not selected any Number');
       return;
     }
+    playSound('diceSound');
     const randomNumber = generateRandomNumber(1, 7);
     setCurrentDice(() => randomNumber);
 
