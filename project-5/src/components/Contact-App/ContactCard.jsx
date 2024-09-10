@@ -2,8 +2,8 @@ import { collection, deleteDoc, doc } from "firebase/firestore";
 import { HiOutlineUserCircle } from "react-icons/hi";
 import { IoMdTrash } from "react-icons/io";
 import { RiEditCircleLine } from "react-icons/ri";
-import { db } from "../config/firebase";
-import useDisclose from "../hooks/useDisclose";
+import { db } from "../../config/firebase";
+import useDisclose from "../../hooks/useDisclose";
 import AddAndUpdateContact from "./AddAndUpdateContact";
 import { toast } from "react-toastify";
 
