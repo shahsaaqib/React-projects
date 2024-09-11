@@ -58,7 +58,7 @@ const ContactApp = () => {
   };
   return (
     <>
-      <div className="mx-auto max-w-[370px]">
+      <div className="">
         <Navbar />
         <div className="flex gap-2">
           <div className="relative flex flex-grow items-center">

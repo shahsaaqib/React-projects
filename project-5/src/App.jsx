@@ -6,8 +6,8 @@ const App = () => {
   const [selectedApp, setSelectedApp] = useState("contact");
 
   return (
-    <div>
-      <div className="mx-auto mt-3 flex max-w-[370px] items-center justify-center gap-2">
+    <div className="mx-auto max-w-[370px]">
+      <div className="mt-3 flex items-center justify-center gap-2">
         <button
           onClick={() => setSelectedApp("contact")}
           className="w-[126px] rounded-lg border-4 border-orange p-3 font-bold text-white"
