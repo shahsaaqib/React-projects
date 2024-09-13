@@ -6,10 +6,13 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import TodoNotFound from "./TodoNotFound";
 import TodoCard from "./TodoCard";
+import AddUpdateTodo from "./AddUpdateTodo";
+import { ToastContainer } from "react-toastify";
 
 const TodoApp = () => {
   const [todos, setTodos] = useState([]);
   const [filter, setFilter] = useState("all");
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   useEffect(() => {
     const getTodos = async () => {
@@ -39,46 +42,57 @@ const TodoApp = () => {
   });
 
   return (
-    <div>
-      <Navbar />
-      <div className="flex h-14 items-center justify-between shadow-sm">
-        <div className="flex">
-          <Button
-            text="All"
-            onClick={() => setFilter("all")}
-            isActive={filter === "all"}
-          />
-          <Button
-            text="Open"
-            onClick={() => setFilter("open")}
-            isActive={filter === "open"}
-          />
-          <Button
-            text="Closed"
-            onClick={() => setFilter("closed")}
-            isActive={filter === "closed"}
-          />
-          <Button
-            text="Archived"
-            onClick={() => setFilter("archived")}
-            isActive={filter === "archived"}
-          />
+    <>
+      <div className={isPopupOpen ? "blur-sm" : ""}>
+        <Navbar />
+        <div className="flex h-14 items-center justify-between shadow-sm">
+          <div className="flex">
+            <Button
+              text="All"
+              onClick={() => setFilter("all")}
+              isActive={filter === "all"}
+            />
+            <Button
+              text="Open"
+              onClick={() => setFilter("open")}
+              isActive={filter === "open"}
+            />
+            <Button
+              text="Closed"
+              onClick={() => setFilter("closed")}
+              isActive={filter === "closed"}
+            />
+            <Button
+              text="Archived"
+              onClick={() => setFilter("archived")}
+              isActive={filter === "archived"}
+            />
+          </div>
+          <div
+            onClick={() => setIsPopupOpen(true)}
+            className="m-auto flex h-8 w-24 items-center justify-center rounded-3xl border border-yellow py-2 text-sm font-medium text-white transition duration-300 ease-in-out hover:bg-lime-300 hover:text-black hover:shadow-sm"
+          >
+            <TiPlus />
+            <button>Add New</button>
+          </div>
         </div>
-        <div className="m-auto flex h-8 w-24 items-center justify-center rounded-3xl border border-yellow py-2 text-sm font-medium text-white transition duration-300 ease-in-out hover:bg-lime-300 hover:text-black hover:shadow-sm">
-          <TiPlus />
-          <button>Add New</button>
+        <div>
+          <div className="mt-4 flex flex-col gap-3">
+            {todos.length <= 0 ? (
+              <TodoNotFound />
+            ) : (
+              filteredTodos.map((todo) => (
+                <TodoCard key={todo.id} todo={todo} />
+              ))
+            )}
+          </div>
         </div>
       </div>
       <div>
-        <div className="mt-4 flex flex-col gap-3">
-          {todos.length <= 0 ? (
-            <TodoNotFound />
-          ) : (
-            filteredTodos.map((todo) => <TodoCard key={todo.id} todo={todo} />)
-          )}
-        </div>
+        {isPopupOpen && <AddUpdateTodo onClose={() => setIsPopupOpen(false)} />}
       </div>
-    </div>
+      <ToastContainer position="bottom-center" />
+    </>
   );
 };
 
