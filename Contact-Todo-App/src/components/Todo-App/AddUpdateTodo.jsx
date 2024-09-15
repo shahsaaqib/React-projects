@@ -1,21 +1,58 @@
-import { addDoc, collection } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { useState } from "react";
 import { db } from "../../config/firebase";
 import { toast } from "react-toastify";
+import { MdDelete } from "react-icons/md";
 
-const AddUpdateTodo = ({ onClose }) => {
-  const [taskName, setTaskName] = useState("");
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("open");
+const AddUpdateTodo = ({ onClose, todo }) => {
+  console.log(todo);
+  const [taskName, setTaskName] = useState(todo ? todo.taskName : "");
+  const [description, setDescription] = useState(todo ? todo.description : "");
+  const [status, setStatus] = useState(todo ? todo.status : "open");
 
+  // Adding a new todo
   const addTodo = async (e) => {
+    e.preventDefault();
     try {
-      e.preventDefault();
-      const todo = { taskName, description, status };
+      const newTodo = { taskName, description, status };
       const contactRef = collection(db, "todos");
-      await addDoc(contactRef, todo);
+      await addDoc(contactRef, newTodo);
       onClose();
       toast.success("Task Added Successfully");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Updating an existing todo
+  const updateTodo = async (e) => {
+    e.preventDefault();
+    try {
+      const todoRef = doc(db, "todos", todo.id);
+      await updateDoc(todoRef, {
+        taskName,
+        description,
+        status,
+      });
+      onClose();
+      toast.success("Task Updated Successfully");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Delete todo
+  const deleteTodo = async (id) => {
+    try {
+      const todoRef = collection(db, "todos");
+      await deleteDoc(doc(todoRef, id));
+      toast.success("Task Deleted Successfully");
     } catch (error) {
       console.log(error);
     }
@@ -24,8 +61,21 @@ const AddUpdateTodo = ({ onClose }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="w-96 rounded-lg bg-white p-6">
-        <h2 className="mb-4 text-lg font-bold">Add New Task</h2>
-        <form onSubmit={addTodo}>
+        <div className="flex items-center justify-between">
+          <h2 className="mb-4 text-lg font-bold">
+            {todo ? "Update Task" : "Add New Task"}
+          </h2>
+          {todo ? (
+            <MdDelete
+              className="cursor-pointer text-3xl text-red-600"
+              onClick={() => deleteTodo(todo.id)}
+            />
+          ) : (
+            ""
+          )}
+        </div>
+
+        <form onSubmit={todo ? updateTodo : addTodo}>
           <div className="mb-4">
             <label className="mb-1 block font-semibold">Task Name</label>
             <input
@@ -92,7 +142,7 @@ const AddUpdateTodo = ({ onClose }) => {
               type="submit"
               className="rounded bg-lime-400 px-4 py-2 font-semibold"
             >
-              Save
+              {todo ? "Update" : "Save"}
             </button>
           </div>
         </form>
